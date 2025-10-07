@@ -5,11 +5,13 @@ class MLP(eqx.Module):
     layers: tuple
 
     def __init__(self, key):
-        key1, key2, key3 = jax.random.split(key,3)
-        self.layers = (eqx.nn.Linear(2, 10),
-                       eqx.nn.Linear(10, 3))
+        key1, key2 = jax.random.split(key,2)
+        self.layers = (eqx.nn.Linear(2, 100, key=key1),
+                       jax.nn.sigmoid,
+                       eqx.nn.Linear(100, 3, key=key2),
+                       jax.nn.softmax)
         
     def __call__(self, x):
         for layer in self.layers[:-1]:
-            x = jax.nn.softmax(layer(x))
+            x = layer(x)
         return self.layers[-1](x)
