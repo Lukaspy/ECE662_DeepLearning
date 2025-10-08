@@ -39,7 +39,6 @@ fig, axs = plt.subplots(rows, cols)
 plt.subplots_adjust(hspace = 0.3)
 for j in range(30):
     h1_image = W[0][j].reshape(28,28)
-    print()
     #print("The weights into h{0} have image ".format(j))
     ax = axs.flat[j]
     im = ax.imshow(h1_image,cmap='BuPu', origin='upper')
@@ -47,7 +46,6 @@ for j in range(30):
 #    plt.xticks(())
 #    plt.yticks(())
 #    print("plt.show():")
-    print()
     if j==1: fig.colorbar(im,ax=axs, fraction=0.03, pad=0.02)
 fig.suptitle("W2 weights Jax/Equinox")
 plt.show()
@@ -64,7 +62,6 @@ for j in range(10):
     ax = axs.flat[j]
     ax.plot(W[1][j],'o')
     ax.set_title("Output {0} weights".format(j))
-    print()
 
 fig.suptitle("W3 weights Jax/Equinox")
 plt.show()
