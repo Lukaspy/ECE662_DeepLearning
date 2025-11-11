@@ -1,7 +1,7 @@
 #Modified from MNIST loader for CIFAR10
 import torch
 from torch.utils.data import DataLoader
-from torchvision import datasets
+from torchvision import datasets, transforms
 from torchvision.transforms import ToTensor
 from jax import numpy as jnp
 
@@ -22,8 +22,6 @@ class JAXBatchLoader:
         images, labels = next(self.loader)
         images = images.numpy()  # shape: (batch, 1, 28, 28)
         labels = labels.numpy()
-        images = images.squeeze(1)  # shape: (batch, 28, 28), normalize
-        # images = images.squeeze(1) / 255.0  # shape: (batch, 28, 28), normalize
         if self.flatten:
             images = images.reshape(images.shape[0], -1)  # (batch, 784)
         if self.one_hot:
@@ -51,11 +49,17 @@ def load_data(batch_size=64, shuffle=True, flatten=False):
 
 
 def load_data_onehot(batch_size=[40_000, 10_000], shuffle=True, num_classes=10, flatten=False):
+    train_transform = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),              
+    ])
+
     train_data = datasets.CIFAR10(
         root="data",
         train=True,
         download=True,
-        transform=ToTensor(),
+        transform=train_transform,
     )
     test_data = datasets.CIFAR10(
         root="data",
