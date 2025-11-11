@@ -1,4 +1,4 @@
-#combines the in class UNet with a final pooling -> MLP head for simple classification
+#combines the in class UNet with a final pooling into MLP head for simple classification
 import jax
 from jax import numpy as jnp
 from jax import random as jr
@@ -24,7 +24,6 @@ class UNetClassifier(eqx.Module):
     ):
         key_unet, key_head = jr.split(key)
 
-        #UNet prior to the MLP classification section
         self.unet = UNet(
             num_spatial_dims=num_spatial_dims,
             in_channels=in_channels,
@@ -35,7 +34,6 @@ class UNetClassifier(eqx.Module):
             key=key_unet,
         )
 
-        #MLP head that performs final classification
         self.head = eqx.nn.Linear(
             in_features=feature_channels,
             out_features=num_classes,

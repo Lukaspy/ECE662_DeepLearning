@@ -1,10 +1,11 @@
+#UNetClassifier for CIFAR10 without any data augmentation
 from UNetClassifier import UNetClassifier 
 import jax
 from jax import random as jr
 from jax import numpy as jnp
 import optax
 import equinox as eqx
-from loader import load_data, load_data_onehot
+from loader_nonaug import load_data, load_data_onehot
 
 
 def cross_entropy_loss(model, x, y):
@@ -71,14 +72,6 @@ if __name__ == "__main__":
     train_iter, test_iter = load_data_onehot(flatten=False)
     X_train, Y_train = next(train_iter)
     X_test, Y_test = next(test_iter)
-
-    print("X_train shape:", X_train.shape)
-    print("X_test shape:", X_test.shape)
-    print("Y_train shape:", Y_train.shape)
-    print("Y_test shape:", Y_test.shape)
-
-    #print("Train == Test images? ", jnp.all(X_train == X_test))
-    #print("Train == Test labels? ", jnp.all(Y_train == Y_test))
 
 
     train(model, optimizer, X_train, Y_train, X_test, Y_test, batch_size=32, epochs=100)
